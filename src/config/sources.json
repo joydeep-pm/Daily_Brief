@@ -47,16 +47,16 @@
       "category": "Product Strategy",
       "type": "rss",
       "url": "https://www.reforge.com/blog/feed",
-      "enabled": true,
-      "note": "Updated from /brief/feed to /blog/feed"
+      "enabled": false,
+      "note": "Disabled - server returns 500 error"
     },
     {
       "name": "Julie Zhuo",
       "category": "Product Strategy",
       "type": "rss",
-      "url": "https://www.juliezhuo.com/feed",
+      "url": "https://lg.substack.com/feed",
       "enabled": true,
-      "note": "Updated from lg.juliezhuo.com (SSL issue)"
+      "note": "The Looking Glass on Substack"
     },
     {
       "name": "Paul Graham",
@@ -70,8 +70,8 @@
       "category": "Product Strategy",
       "type": "rss",
       "url": "https://review.firstround.com/rss",
-      "enabled": true,
-      "note": "Updated from /feed to /rss"
+      "enabled": false,
+      "note": "Disabled - RSS feed returns 404"
     },
     {
       "name": "Marty Cagan / SVPG",
@@ -241,9 +241,9 @@
       "name": "Matthew Berman",
       "category": "AI Architecture",
       "type": "youtube",
-      "channelId": "UCqkPnqW0bqYYkwezQMiYQkQ",
+      "channelId": "UCawZsQWqfGSbCI5yjkdVkTA",
       "enabled": true,
-      "note": "Needs YOUTUBE_API_KEY"
+      "note": "Uses YouTube RSS (no API key needed)"
     },
     {
       "name": "Fireship",
@@ -258,32 +258,32 @@
       "category": "AI Architecture",
       "type": "youtube",
       "channelId": "UCNJ1Ymd5yWu50z-q_c_A4nA",
-      "enabled": true,
-      "note": "Needs YOUTUBE_API_KEY"
+      "enabled": false,
+      "note": "Disabled - channel ID no longer valid (404)"
     },
     {
       "name": "AI Jason",
       "category": "AI Architecture",
       "type": "youtube",
       "channelId": "UCkGMJp79rC8yD4h7X1h1zLg",
-      "enabled": true,
-      "note": "Needs YOUTUBE_API_KEY"
+      "enabled": false,
+      "note": "Disabled - channel ID no longer valid (404)"
     },
     {
       "name": "Matt Wolfe",
       "category": "AI Architecture",
       "type": "youtube",
-      "channelId": "UCpYLbrzJm161Xm2q9D32XAQ",
+      "channelId": "UChpleBmo18P08aKCIgti38g",
       "enabled": true,
-      "note": "Needs YOUTUBE_API_KEY"
+      "note": "Uses YouTube RSS (no API key needed)"
     },
     {
       "name": "Theo - t3.gg",
       "category": "AI Architecture",
       "type": "youtube",
-      "channelId": "UC-TcgHDEvW_0_1XkH1cE5cw",
+      "channelId": "UCbRP3c757lWg9M-U7TyEkXA",
       "enabled": true,
-      "note": "Needs YOUTUBE_API_KEY"
+      "note": "Uses YouTube RSS (no API key needed)"
     },
     {
       "name": "Benedict Evans",
