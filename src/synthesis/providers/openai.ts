@@ -13,8 +13,8 @@ export class OpenAIProvider implements LLMProvider {
     });
 
     this.config = {
-      maxTokens: config?.maxTokens || 4096,
-      temperature: config?.temperature || 0.7
+      maxTokens: config?.maxTokens ?? 4096, // Keep at 4K for OpenAI
+      temperature: config?.temperature ?? 0.7
     };
   }
 

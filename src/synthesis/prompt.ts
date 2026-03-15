@@ -74,10 +74,42 @@ export function buildContentPrompt(items: SourceItem[]): string {
     byCategory.set(item.category, existing);
   }
 
-  let prompt = '---\n## CONTENT FROM LAST 24 HOURS:\n\n';
+  // Smart sampling: if too many items, prioritize recent and diverse sources
+  const MAX_ITEMS = 100; // Limit total items to prevent token overflow
+  let sampledItems: SourceItem[] = [];
+
+  if (items.length > MAX_ITEMS) {
+    // Sort by published date (most recent first)
+    const sortedItems = [...items].sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
+
+    // Take top items ensuring diversity across sources
+    const seenSources = new Set<string>();
+    for (const item of sortedItems) {
+      if (sampledItems.length >= MAX_ITEMS) break;
+
+      // Prefer items from sources we haven't seen yet
+      if (!seenSources.has(item.sourceName) || sampledItems.length < MAX_ITEMS / 2) {
+        sampledItems.push(item);
+        seenSources.add(item.sourceName);
+      }
+    }
+  } else {
+    sampledItems = items;
+  }
+
+  let prompt = `---\n## CONTENT FROM LAST 24 HOURS:\n\n`;
+  prompt += `Total items: ${items.length} | Analyzed: ${sampledItems.length}\n\n`;
+
+  // Re-group sampled items by category
+  const sampledByCategory = new Map<string, SourceItem[]>();
+  for (const item of sampledItems) {
+    const existing = sampledByCategory.get(item.category) || [];
+    existing.push(item);
+    sampledByCategory.set(item.category, existing);
+  }
 
   // Add content grouped by category
-  for (const [category, categoryItems] of byCategory) {
+  for (const [category, categoryItems] of sampledByCategory) {
     prompt += `### ${category}\n\n`;
 
     for (const item of categoryItems) {
@@ -88,8 +120,8 @@ export function buildContentPrompt(items: SourceItem[]): string {
         prompt += `**URL**: ${item.url}\n`;
       }
 
-      // Truncate very long content
-      const maxContentLength = 2000;
+      // Truncate content more aggressively
+      const maxContentLength = 1000; // Reduced from 2000
       let content = item.content;
       if (content.length > maxContentLength) {
         content = content.substring(0, maxContentLength) + '... [truncated]';
