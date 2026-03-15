@@ -13,7 +13,7 @@ export class AnthropicProvider implements LLMProvider {
     });
 
     this.config = {
-      maxTokens: config?.maxTokens ?? 4096,
+      maxTokens: config?.maxTokens ?? 8192, // Increased for detailed summaries
       temperature: config?.temperature ?? 0.7
     };
   }
