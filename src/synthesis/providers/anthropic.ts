@@ -23,7 +23,7 @@ export class AnthropicProvider implements LLMProvider {
 
     try {
       const response = await this.client.messages.create({
-        model: 'claude-haiku-4-5-20250929',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: this.config.maxTokens!,
         temperature: this.config.temperature!,
         system: systemPrompt,
