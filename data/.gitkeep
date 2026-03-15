@@ -1,0 +1,2 @@
+# This directory stores the SQLite state database
+# The database file (state.db) is gitignored but the directory structure is preserved

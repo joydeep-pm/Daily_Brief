@@ -1,0 +1,291 @@
+{
+  "sources": [
+    {
+      "name": "Stratechery",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://stratechery.com/feed/",
+      "enabled": true
+    },
+    {
+      "name": "Product Growth (Aakash Gupta)",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://www.aakashg.com/feed/",
+      "enabled": true
+    },
+    {
+      "name": "Lenny's Newsletter",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://www.lennysnewsletter.com/feed",
+      "enabled": true
+    },
+    {
+      "name": "Leah's ProducTea",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://www.leahtharin.com/feed",
+      "enabled": true
+    },
+    {
+      "name": "The Product Compass",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://www.productcompass.pm/feed",
+      "enabled": true
+    },
+    {
+      "name": "The Beautiful Mess",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://cutlefish.substack.com/feed",
+      "enabled": true
+    },
+    {
+      "name": "Reforge Brief",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://www.reforge.com/brief/feed",
+      "enabled": true
+    },
+    {
+      "name": "The Looking Glass",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://lg.juliezhuo.com/feed",
+      "enabled": true
+    },
+    {
+      "name": "Paul Graham",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "http://www.aaronsw.com/2002/feeds/pgessays.rss",
+      "enabled": true
+    },
+    {
+      "name": "First Round Review",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://review.firstround.com/feed",
+      "enabled": true
+    },
+    {
+      "name": "Marty Cagan / SVPG",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://svpg.com/feed/",
+      "enabled": true
+    },
+    {
+      "name": "Teresa Torres / Product Talk",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://www.producttalk.org/feed/",
+      "enabled": true
+    },
+    {
+      "name": "Ask Gib",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://askgib.substack.com/feed",
+      "enabled": true
+    },
+    {
+      "name": "Sachin Rekhi",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://www.sachinrekhi.com/rss",
+      "enabled": true
+    },
+    {
+      "name": "Casey Winters",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://caseyaccidental.com/feed/",
+      "enabled": true
+    },
+    {
+      "name": "Hiten Shah",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://hiten.substack.com/feed",
+      "enabled": true
+    },
+    {
+      "name": "Shreyas Doshi",
+      "category": "Product Strategy",
+      "type": "x_scraper",
+      "username": "shreyas",
+      "enabled": true
+    },
+    {
+      "name": "Elena Verna",
+      "category": "Product Strategy",
+      "type": "x_scraper",
+      "username": "elenaverna",
+      "enabled": true
+    },
+    {
+      "name": "Claire Vo",
+      "category": "Product Strategy",
+      "type": "x_scraper",
+      "username": "clairevo",
+      "enabled": true
+    },
+    {
+      "name": "Y Combinator",
+      "category": "Product Strategy",
+      "type": "youtube",
+      "channelId": "UCcefcZRL2oaA_uBNeo5UOWg",
+      "enabled": true
+    },
+    {
+      "name": "The Code",
+      "category": "AI Architecture",
+      "type": "gmail_extraction",
+      "query": "from:newsletter@thecode.com",
+      "enabled": true
+    },
+    {
+      "name": "Simon Willison's Weblog",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://simonwillison.net/atom/everything/",
+      "enabled": true
+    },
+    {
+      "name": "The Pragmatic Engineer",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://blog.pragmaticengineer.com/rss/",
+      "enabled": true
+    },
+    {
+      "name": "Latent Space",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://www.latent.space/feed",
+      "enabled": true
+    },
+    {
+      "name": "The Cognitive Revolution",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://rss.art19.com/the-cognitive-revolution",
+      "enabled": true
+    },
+    {
+      "name": "The Rundown AI",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://www.therundown.ai/feed",
+      "enabled": true
+    },
+    {
+      "name": "One Useful Thing",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://www.oneusefulthing.org/feed",
+      "enabled": true
+    },
+    {
+      "name": "AI Snake Oil",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://www.aisnakeoil.com/feed",
+      "enabled": true
+    },
+    {
+      "name": "Interconnects",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://www.interconnects.ai/feed",
+      "enabled": true
+    },
+    {
+      "name": "Hugging Face Blog",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "enabled": true
+    },
+    {
+      "name": "Harrison Chase",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "hwchase17",
+      "enabled": true
+    },
+    {
+      "name": "Logan Kilpatrick",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "OfficialLoganK",
+      "enabled": true
+    },
+    {
+      "name": "Andrej Karpathy",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "karpathy",
+      "enabled": true
+    },
+    {
+      "name": "Matthew Berman",
+      "category": "AI Architecture",
+      "type": "youtube",
+      "channelId": "UCqkPnqW0bqYYkwezQMiYQkQ",
+      "enabled": true
+    },
+    {
+      "name": "Fireship",
+      "category": "AI Architecture",
+      "type": "youtube",
+      "channelId": "UCsBjURrPoezykLs9EqgamOA",
+      "enabled": true
+    },
+    {
+      "name": "AI Explained",
+      "category": "AI Architecture",
+      "type": "youtube",
+      "channelId": "UCNJ1Ymd5yWu50z-q_c_A4nA",
+      "enabled": true
+    },
+    {
+      "name": "AI Jason",
+      "category": "AI Architecture",
+      "type": "youtube",
+      "channelId": "UCkGMJp79rC8yD4h7X1h1zLg",
+      "enabled": true
+    },
+    {
+      "name": "Matt Wolfe",
+      "category": "AI Architecture",
+      "type": "youtube",
+      "channelId": "UCpYLbrzJm161Xm2q9D32XAQ",
+      "enabled": true
+    },
+    {
+      "name": "Theo - t3.gg",
+      "category": "AI Architecture",
+      "type": "youtube",
+      "channelId": "UC-TcgHDEvW_0_1XkH1cE5cw",
+      "enabled": true
+    },
+    {
+      "name": "Benedict Evans",
+      "category": "Macro Tech",
+      "type": "rss",
+      "url": "https://www.ben-evans.com/benedictevans?format=rss",
+      "enabled": true
+    },
+    {
+      "name": "Not Boring",
+      "category": "Macro Tech",
+      "type": "rss",
+      "url": "https://www.notboring.co/feed",
+      "enabled": true
+    }
+  ]
+}

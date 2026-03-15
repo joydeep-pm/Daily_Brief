@@ -1,0 +1,62 @@
+name: Daily Brief
+
+on:
+  schedule:
+    # Run at 4:30 AM UTC (10:00 AM IST)
+    - cron: '30 4 * * *'
+  workflow_dispatch: # Allow manual trigger for testing
+
+jobs:
+  generate-briefing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Restore state database
+        uses: actions/cache/restore@v4
+        with:
+          path: data/state.db
+          key: daily-brief-state-${{ github.run_id }}
+          restore-keys: |
+            daily-brief-state-
+
+      - name: Run Daily Brief
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          GMAIL_SEND_ADDRESS: ${{ secrets.GMAIL_SEND_ADDRESS }}
+          TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME }}
+          TWITTER_PASSWORD: ${{ secrets.TWITTER_PASSWORD }}
+        run: npm start
+
+      - name: Save state database
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: data/state.db
+          key: daily-brief-state-${{ github.run_id }}
+
+      - name: Commit state database (alternative to cache)
+        if: always() && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "Daily Brief Bot"
+          git config user.email "bot@dailybrief.local"
+          git add data/state.db
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update state database [skip ci]" && git push)
