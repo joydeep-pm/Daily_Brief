@@ -2,6 +2,7 @@ import { StateManager } from '../state/database.js';
 import { SourceConfig, SourceHandler, SourceItem, SourceError, FetchResult } from './types.js';
 import { RSSHandler } from './sources/rss.js';
 import { YouTubeHandler } from './sources/youtube.js';
+import { YouTubeRSSHandler } from './sources/youtube-rss.js';
 import { GmailHandler } from './sources/gmail.js';
 import { TwitterHandler } from './sources/twitter.js';
 import fs from 'fs';
@@ -18,7 +19,8 @@ export class SourceManager {
 
     // Initialize handlers
     this.handlers.set('rss', new RSSHandler());
-    this.handlers.set('youtube', new YouTubeHandler());
+    // Use YouTube RSS handler (simpler, no API key needed, no quota limits!)
+    this.handlers.set('youtube', new YouTubeRSSHandler());
     this.handlers.set('gmail_extraction', new GmailHandler());
     this.handlers.set('x_scraper', new TwitterHandler());
 
