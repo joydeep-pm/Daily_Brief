@@ -43,18 +43,20 @@
       "enabled": true
     },
     {
-      "name": "Reforge Brief",
+      "name": "Reforge Blog",
       "category": "Product Strategy",
       "type": "rss",
-      "url": "https://www.reforge.com/brief/feed",
-      "enabled": true
+      "url": "https://www.reforge.com/blog/feed",
+      "enabled": true,
+      "note": "Updated from /brief/feed to /blog/feed"
     },
     {
-      "name": "The Looking Glass",
+      "name": "Julie Zhuo",
       "category": "Product Strategy",
       "type": "rss",
-      "url": "https://lg.juliezhuo.com/feed",
-      "enabled": true
+      "url": "https://www.juliezhuo.com/feed",
+      "enabled": true,
+      "note": "Updated from lg.juliezhuo.com (SSL issue)"
     },
     {
       "name": "Paul Graham",
@@ -67,8 +69,9 @@
       "name": "First Round Review",
       "category": "Product Strategy",
       "type": "rss",
-      "url": "https://review.firstround.com/feed",
-      "enabled": true
+      "url": "https://review.firstround.com/rss",
+      "enabled": true,
+      "note": "Updated from /feed to /rss"
     },
     {
       "name": "Marty Cagan / SVPG",
@@ -92,13 +95,6 @@
       "enabled": true
     },
     {
-      "name": "Sachin Rekhi",
-      "category": "Product Strategy",
-      "type": "rss",
-      "url": "https://www.sachinrekhi.com/rss",
-      "enabled": true
-    },
-    {
       "name": "Casey Winters",
       "category": "Product Strategy",
       "type": "rss",
@@ -117,35 +113,48 @@
       "category": "Product Strategy",
       "type": "x_scraper",
       "username": "shreyas",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled - Twitter scraper broken"
     },
     {
       "name": "Elena Verna",
       "category": "Product Strategy",
       "type": "x_scraper",
       "username": "elenaverna",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled - Twitter scraper broken"
     },
     {
       "name": "Claire Vo",
       "category": "Product Strategy",
       "type": "x_scraper",
       "username": "clairevo",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled - Twitter scraper broken"
     },
     {
       "name": "Y Combinator",
       "category": "Product Strategy",
       "type": "youtube",
       "channelId": "UCcefcZRL2oaA_uBNeo5UOWg",
-      "enabled": true
+      "enabled": true,
+      "note": "Needs YOUTUBE_API_KEY"
     },
     {
-      "name": "The Code",
+      "name": "LangChain Blog",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://blog.langchain.dev/feed/",
+      "enabled": true,
+      "note": "Added as alternative to Harrison Chase Twitter"
+    },
+    {
+      "name": "The Rundown AI Newsletter",
       "category": "AI Architecture",
       "type": "gmail_extraction",
-      "query": "from:newsletter@thecode.com",
-      "enabled": true
+      "query": "from:newsletter@therundown.ai OR from:rowan@therundown.ai",
+      "enabled": true,
+      "note": "Switched from RSS (blocked) to Gmail extraction"
     },
     {
       "name": "Simon Willison's Weblog",
@@ -166,20 +175,6 @@
       "category": "AI Architecture",
       "type": "rss",
       "url": "https://www.latent.space/feed",
-      "enabled": true
-    },
-    {
-      "name": "The Cognitive Revolution",
-      "category": "AI Architecture",
-      "type": "rss",
-      "url": "https://rss.art19.com/the-cognitive-revolution",
-      "enabled": true
-    },
-    {
-      "name": "The Rundown AI",
-      "category": "AI Architecture",
-      "type": "rss",
-      "url": "https://www.therundown.ai/feed",
       "enabled": true
     },
     {
@@ -215,63 +210,80 @@
       "category": "AI Architecture",
       "type": "x_scraper",
       "username": "hwchase17",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled - use LangChain Blog instead"
     },
     {
       "name": "Logan Kilpatrick",
       "category": "AI Architecture",
       "type": "x_scraper",
       "username": "OfficialLoganK",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled - Twitter scraper broken"
     },
     {
       "name": "Andrej Karpathy",
       "category": "AI Architecture",
       "type": "x_scraper",
       "username": "karpathy",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled - use YouTube channel instead"
+    },
+    {
+      "name": "Andrej Karpathy YouTube",
+      "category": "AI Architecture",
+      "type": "youtube",
+      "channelId": "UCYO_jab_esuFRV4b17AJtAw",
+      "enabled": true,
+      "note": "Added as alternative to Twitter"
     },
     {
       "name": "Matthew Berman",
       "category": "AI Architecture",
       "type": "youtube",
       "channelId": "UCqkPnqW0bqYYkwezQMiYQkQ",
-      "enabled": true
+      "enabled": true,
+      "note": "Needs YOUTUBE_API_KEY"
     },
     {
       "name": "Fireship",
       "category": "AI Architecture",
       "type": "youtube",
       "channelId": "UCsBjURrPoezykLs9EqgamOA",
-      "enabled": true
+      "enabled": true,
+      "note": "Needs YOUTUBE_API_KEY"
     },
     {
       "name": "AI Explained",
       "category": "AI Architecture",
       "type": "youtube",
       "channelId": "UCNJ1Ymd5yWu50z-q_c_A4nA",
-      "enabled": true
+      "enabled": true,
+      "note": "Needs YOUTUBE_API_KEY"
     },
     {
       "name": "AI Jason",
       "category": "AI Architecture",
       "type": "youtube",
       "channelId": "UCkGMJp79rC8yD4h7X1h1zLg",
-      "enabled": true
+      "enabled": true,
+      "note": "Needs YOUTUBE_API_KEY"
     },
     {
       "name": "Matt Wolfe",
       "category": "AI Architecture",
       "type": "youtube",
       "channelId": "UCpYLbrzJm161Xm2q9D32XAQ",
-      "enabled": true
+      "enabled": true,
+      "note": "Needs YOUTUBE_API_KEY"
     },
     {
       "name": "Theo - t3.gg",
       "category": "AI Architecture",
       "type": "youtube",
       "channelId": "UC-TcgHDEvW_0_1XkH1cE5cw",
-      "enabled": true
+      "enabled": true,
+      "note": "Needs YOUTUBE_API_KEY"
     },
     {
       "name": "Benedict Evans",
