@@ -42,8 +42,7 @@ jobs:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           GMAIL_SEND_ADDRESS: ${{ secrets.GMAIL_SEND_ADDRESS }}
-          TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME }}
-          TWITTER_PASSWORD: ${{ secrets.TWITTER_PASSWORD }}
+          TWITTER_API_IO_KEY: ${{ secrets.TWITTER_API_IO_KEY }}
         run: npm start
 
       - name: Save state database

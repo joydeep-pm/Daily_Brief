@@ -113,8 +113,8 @@
       "category": "Product Strategy",
       "type": "x_scraper",
       "username": "shreyas",
-      "enabled": false,
-      "note": "Disabled - Twitter scraper broken"
+      "enabled": true,
+      "note": "Using twitterapi.io with user ID caching (reduces API calls by 50%)"
     },
     {
       "name": "Elena Verna",
@@ -122,7 +122,15 @@
       "type": "x_scraper",
       "username": "elenaverna",
       "enabled": false,
-      "note": "Disabled - Twitter scraper broken"
+      "note": "Disabled to make room for Aakash Gupta"
+    },
+    {
+      "name": "Aakash Gupta",
+      "category": "Product Strategy",
+      "type": "x_scraper",
+      "username": "aakashg0",
+      "enabled": true,
+      "note": "Twitter takes complement blog content - different signal"
     },
     {
       "name": "Claire Vo",
@@ -138,7 +146,7 @@
       "type": "youtube",
       "channelId": "UCcefcZRL2oaA_uBNeo5UOWg",
       "enabled": true,
-      "note": "Needs YOUTUBE_API_KEY"
+      "note": "Using YouTube Data API v3"
     },
     {
       "name": "LangChain Blog",
@@ -219,15 +227,15 @@
       "type": "x_scraper",
       "username": "OfficialLoganK",
       "enabled": false,
-      "note": "Disabled - Twitter scraper broken"
+      "note": "Disabled to optimize rate limits"
     },
     {
       "name": "Andrej Karpathy",
       "category": "AI Architecture",
       "type": "x_scraper",
       "username": "karpathy",
-      "enabled": false,
-      "note": "Disabled - use YouTube channel instead"
+      "enabled": true,
+      "note": "Using twitterapi.io with user ID caching (reduces API calls by 50%)"
     },
     {
       "name": "Andrej Karpathy YouTube",
@@ -235,7 +243,7 @@
       "type": "youtube",
       "channelId": "UCYO_jab_esuFRV4b17AJtAw",
       "enabled": true,
-      "note": "Added as alternative to Twitter"
+      "note": "Using YouTube Data API v3"
     },
     {
       "name": "Matthew Berman",
@@ -243,7 +251,7 @@
       "type": "youtube",
       "channelId": "UCawZsQWqfGSbCI5yjkdVkTA",
       "enabled": true,
-      "note": "Uses YouTube RSS (no API key needed)"
+      "note": "Using YouTube Data API v3"
     },
     {
       "name": "Fireship",
@@ -251,7 +259,7 @@
       "type": "youtube",
       "channelId": "UCsBjURrPoezykLs9EqgamOA",
       "enabled": true,
-      "note": "Needs YOUTUBE_API_KEY"
+      "note": "Using YouTube Data API v3"
     },
     {
       "name": "AI Explained",
@@ -275,7 +283,7 @@
       "type": "youtube",
       "channelId": "UChpleBmo18P08aKCIgti38g",
       "enabled": true,
-      "note": "Uses YouTube RSS (no API key needed)"
+      "note": "Using YouTube Data API v3"
     },
     {
       "name": "Theo - t3.gg",
@@ -283,7 +291,7 @@
       "type": "youtube",
       "channelId": "UCbRP3c757lWg9M-U7TyEkXA",
       "enabled": true,
-      "note": "Uses YouTube RSS (no API key needed)"
+      "note": "Using YouTube Data API v3"
     },
     {
       "name": "Benedict Evans",
@@ -298,6 +306,104 @@
       "type": "rss",
       "url": "https://www.notboring.co/feed",
       "enabled": true
+    },
+    {
+      "name": "Dwarkesh Podcast",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://api.substack.com/feed/podcast/69345.rss",
+      "enabled": true,
+      "note": "Deeply researched interviews on AI, tech, and future"
+    },
+    {
+      "name": "Lex Fridman Podcast",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://lexfridman.com/feed/podcast/",
+      "enabled": true,
+      "note": "Long-form conversations about AI, science, and technology"
+    },
+    {
+      "name": "Lex Fridman YouTube",
+      "category": "AI Architecture",
+      "type": "youtube",
+      "channelId": "UCSHZKyawb77ixDdsGog4iWA",
+      "enabled": true,
+      "note": "YouTube channel with transcripts (complementary to RSS)"
+    },
+    {
+      "name": "r/Anthropic (Top Daily)",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://www.reddit.com/r/Anthropic/top/.rss?t=day",
+      "enabled": true
+    },
+    {
+      "name": "r/Ollama (Top Daily)",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://www.reddit.com/r/Ollama/top/.rss?t=day",
+      "enabled": true
+    },
+    {
+      "name": "r/MachineLearning (Top Daily)",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://www.reddit.com/r/MachineLearning/top/.rss?t=day",
+      "enabled": true
+    },
+    {
+      "name": "r/ExperiencedDevs (Top Daily)",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://www.reddit.com/r/ExperiencedDevs/top/.rss?t=day",
+      "enabled": true
+    },
+    {
+      "name": "r/SaaS (Top Daily)",
+      "category": "Product Strategy",
+      "type": "rss",
+      "url": "https://www.reddit.com/r/SaaS/top/.rss?t=day",
+      "enabled": true
+    },
+    {
+      "name": "r/ycombinator (Top Daily)",
+      "category": "Macro Tech",
+      "type": "rss",
+      "url": "https://www.reddit.com/r/ycombinator/top/.rss?t=day",
+      "enabled": true
+    },
+    {
+      "name": "Hacker News (Top Stories)",
+      "category": "Macro Tech",
+      "type": "rss",
+      "url": "https://hnrss.org/frontpage",
+      "enabled": true,
+      "note": "Top stories from Hacker News"
+    },
+    {
+      "name": "GitHub Engineering Blog",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://github.blog/engineering/feed/",
+      "enabled": true,
+      "note": "GitHub engineering insights and best practices"
+    },
+    {
+      "name": "Martin Fowler",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://martinfowler.com/feed.atom",
+      "enabled": true,
+      "note": "Software architecture and design patterns"
+    },
+    {
+      "name": "Kent Beck",
+      "category": "Product Strategy",
+      "type": "x_scraper",
+      "username": "KentBeck",
+      "enabled": false,
+      "note": "Disabled - use for Twitter hot takes if rate limits allow"
     }
   ]
 }

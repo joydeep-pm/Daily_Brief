@@ -1,12 +1,22 @@
-import { Scraper } from 'agent-twitter-client';
 import { SourceHandler, SourceConfig, SourceItem } from '../types.js';
+import { TwitterCache } from './twitter-cache.js';
 
+/**
+ * Twitter Handler using twitterapi.io REST API
+ * Uses caching to reduce API calls from 2 to 1 per source
+ */
 export class TwitterHandler implements SourceHandler {
-  private scraper: Scraper;
-  private initialized = false;
+  private apiKey: string;
+  private baseUrl = 'https://api.twitterapi.io';
+  private cache: TwitterCache;
 
   constructor() {
-    this.scraper = new Scraper();
+    const apiKey = process.env.TWITTER_API_IO_KEY;
+    if (!apiKey) {
+      throw new Error('TWITTER_API_IO_KEY not configured in environment variables');
+    }
+    this.apiKey = apiKey;
+    this.cache = new TwitterCache();
   }
 
   async fetch(source: SourceConfig, lastProcessedTime?: Date): Promise<SourceItem[]> {
@@ -15,50 +25,112 @@ export class TwitterHandler implements SourceHandler {
     }
 
     try {
-      // Login if not already authenticated
-      if (!this.initialized) {
-        await this.login();
-        this.initialized = true;
-      }
+      // Step 1: Get user ID (check cache first to save API calls)
+      let userId = this.cache.getUserId(source.username);
 
-      // Fetch recent tweets from user
-      const tweets = [];
-      const cutoffTime = lastProcessedTime || new Date(Date.now() - 24 * 60 * 60 * 1000); // Default: last 24 hours
+      if (!userId) {
+        // Cache miss - fetch from API
+        console.log(`   📝 Cache miss for @${source.username}, fetching user ID...`);
+        const userInfoResponse = await fetch(
+          `${this.baseUrl}/twitter/user/info?userName=${source.username}`,
+          {
+            headers: {
+              'X-API-Key': this.apiKey,
+              'Accept': 'application/json'
+            }
+          }
+        );
 
-      for await (const tweet of this.scraper.getTweets(source.username, 20)) {
-        if (!tweet.timeParsed || tweet.timeParsed <= cutoffTime) {
-          break;
+        if (!userInfoResponse.ok) {
+          throw new Error(`Twitter API error (user info): ${userInfoResponse.status} ${userInfoResponse.statusText}`);
         }
 
-        tweets.push(tweet);
+        const userInfoData = await userInfoResponse.json();
+        userId = userInfoData.data?.id;
+
+        if (!userId) {
+          throw new Error(`Could not find user ID for @${source.username}`);
+        }
+
+        // Cache the user ID for future runs
+        this.cache.setUserId(source.username, userId);
+
+        // Add 3-second delay between API calls to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      } else {
+        console.log(`   ✓ Using cached user ID for @${source.username}`);
       }
 
-      const items: SourceItem[] = tweets.map(tweet => ({
-        id: tweet.id || String(tweet.timestamp),
-        title: `Tweet by @${source.username}`,
-        content: tweet.text || '',
-        url: tweet.permanentUrl,
-        publishedAt: tweet.timeParsed || new Date(tweet.timestamp || Date.now()),
-        category: source.category,
-        sourceName: source.name
-      }));
+      // Step 2: Fetch user timeline using userId
+      const timelineResponse = await fetch(
+        `${this.baseUrl}/twitter/user/tweet_timeline?userId=${userId}&includeReplies=false`,
+        {
+          headers: {
+            'X-API-Key': this.apiKey,
+            'Accept': 'application/json'
+          }
+        }
+      );
+
+      if (!timelineResponse.ok) {
+        throw new Error(`Twitter API error (timeline): ${timelineResponse.status} ${timelineResponse.statusText}`);
+      }
+
+      const timelineData = await timelineResponse.json();
+      const tweets = timelineData.data?.tweets || [];
+      const items: SourceItem[] = [];
+      const cutoffTime = lastProcessedTime || new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+      for (const tweet of tweets) {
+        // Parse tweet timestamp (twitterapi.io uses 'created_at' field)
+        const createdAt = tweet.created_at || tweet.createdAt;
+        if (!createdAt) continue;
+
+        const publishedAt = new Date(createdAt);
+
+        // Filter by last processed time
+        if (publishedAt <= cutoffTime) {
+          continue;
+        }
+
+        // Get tweet text
+        const tweetText = tweet.text || tweet.full_text || '';
+
+        // Skip retweets and replies to maintain high signal-to-noise ratio
+        if (tweetText.startsWith('RT @') || tweetText.startsWith('@')) {
+          continue;
+        }
+
+        // Skip tweets with no meaningful content
+        if (tweetText.trim().length < 20) {
+          continue;
+        }
+
+        const tweetId = tweet.id || tweet.id_str;
+
+        items.push({
+          id: String(tweetId),
+          title: `Tweet by @${source.username}`,
+          content: this.cleanTweetText(tweetText),
+          url: `https://twitter.com/${source.username}/status/${tweetId}`,
+          publishedAt,
+          category: source.category,
+          sourceName: source.name
+        });
+      }
 
       return items;
     } catch (error) {
-      // Critical: Don't fail the entire pipeline if Twitter scraper breaks
-      console.error(`Twitter scraper failed for @${source.username}:`, error);
-      throw new Error(`Twitter scraper unavailable (unofficial API may have changed)`);
+      throw new Error(`Failed to fetch Twitter timeline: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
-  private async login(): Promise<void> {
-    const username = process.env.TWITTER_USERNAME;
-    const password = process.env.TWITTER_PASSWORD;
-
-    if (!username || !password) {
-      throw new Error('Twitter credentials not configured (TWITTER_USERNAME, TWITTER_PASSWORD)');
-    }
-
-    await this.scraper.login(username, password);
+  private cleanTweetText(text: string): string {
+    return text
+      // Remove short URLs (they're usually included separately)
+      .replace(/https?:\/\/t\.co\/\w+/g, '')
+      // Clean up excessive whitespace
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 }

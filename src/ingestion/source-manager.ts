@@ -5,6 +5,7 @@ import { YouTubeHandler } from './sources/youtube.js';
 import { YouTubeRSSHandler } from './sources/youtube-rss.js';
 import { GmailHandler } from './sources/gmail.js';
 import { TwitterHandler } from './sources/twitter.js';
+import { NitterHandler } from './sources/nitter.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -19,10 +20,11 @@ export class SourceManager {
 
     // Initialize handlers
     this.handlers.set('rss', new RSSHandler());
-    // Use YouTube RSS handler (simpler, no API key needed, no quota limits!)
-    this.handlers.set('youtube', new YouTubeRSSHandler());
+    // Use YouTube Data API v3 (more reliable, fetches transcripts)
+    this.handlers.set('youtube', new YouTubeHandler());
     this.handlers.set('gmail_extraction', new GmailHandler());
     this.handlers.set('x_scraper', new TwitterHandler());
+    this.handlers.set('nitter', new NitterHandler());
 
     // Load sources from config
     const configPath = sourcesPath || path.join(process.cwd(), 'src', 'config', 'sources.json');
@@ -44,6 +46,11 @@ export class SourceManager {
         const items = await this.fetchSource(source);
         allItems.push(...items);
         console.log(`   ✓ ${source.name}: ${items.length} new items`);
+
+        // Add delay after Twitter sources to avoid rate limiting
+        if (source.type === 'x_scraper') {
+          await this.sleep(5000); // 5 second delay between Twitter sources
+        }
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
         errors.push({

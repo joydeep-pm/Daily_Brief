@@ -11,7 +11,7 @@ export interface SourceItem {
 export interface SourceConfig {
   name: string;
   category: string;
-  type: 'rss' | 'youtube' | 'gmail_extraction' | 'x_scraper';
+  type: 'rss' | 'youtube' | 'gmail_extraction' | 'x_scraper' | 'nitter';
   enabled: boolean;
   // RSS specific
   url?: string;
