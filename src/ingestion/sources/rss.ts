@@ -8,7 +8,8 @@ export class RSSHandler implements SourceHandler {
     this.parser = new Parser({
       timeout: 10000,
       headers: {
-        'User-Agent': 'Daily-Brief-Aggregator/1.0'
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*'
       }
     });
   }

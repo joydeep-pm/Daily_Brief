@@ -55,8 +55,8 @@ export class TwitterHandler implements SourceHandler {
         // Cache the user ID for future runs
         this.cache.setUserId(source.username, userId);
 
-        // Add 3-second delay between API calls to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        // Add 5-second delay between API calls to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 5000));
       } else {
         console.log(`   ✓ Using cached user ID for @${source.username}`);
       }

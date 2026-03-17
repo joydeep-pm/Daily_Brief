@@ -26,10 +26,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Restore state database
+      - name: Restore state and cache
         uses: actions/cache/restore@v4
         with:
-          path: data/state.db
+          path: |
+            data/state.db
+            data/twitter-cache.json
           key: daily-brief-state-${{ github.run_id }}
           restore-keys: |
             daily-brief-state-
@@ -48,11 +50,13 @@ jobs:
           TWITTER_API_IO_KEY: ${{ secrets.TWITTER_API_IO_KEY }}
         run: npm start
 
-      - name: Save state database
+      - name: Save state and cache
         uses: actions/cache/save@v4
         if: always()
         with:
-          path: data/state.db
+          path: |
+            data/state.db
+            data/twitter-cache.json
           key: daily-brief-state-${{ github.run_id }}
 
       - name: Commit state database (alternative to cache)

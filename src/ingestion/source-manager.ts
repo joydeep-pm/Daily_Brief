@@ -49,7 +49,7 @@ export class SourceManager {
 
         // Add delay after Twitter sources to avoid rate limiting
         if (source.type === 'x_scraper') {
-          await this.sleep(5000); // 5 second delay between Twitter sources
+          await this.sleep(10000); // 10 second delay between Twitter sources
         }
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
