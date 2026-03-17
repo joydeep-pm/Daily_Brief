@@ -29,7 +29,7 @@ For each theme:
   - Explain the "so what?" - why does this matter?
   - Connect to broader trends when relevant
   - Include specific examples, data points, or quotes where impactful
-  - Cite sources in parentheses (Author/Publication)
+  - Cite sources with linked references: [Source Name](URL) — always include the original URL so readers can click through to the full article/post
 - **Strategic Implications**: End each theme with 1-2 sentences on what this means for the future
 
 ### Emerging Patterns
