@@ -113,8 +113,8 @@
       "category": "Product Strategy",
       "type": "x_scraper",
       "username": "shreyas",
-      "enabled": false,
-      "note": "Disabled - twitterapi.io free credits exhausted (402)"
+      "enabled": true,
+      "note": "User ID cached - 1 API call per run"
     },
     {
       "name": "Elena Verna",
@@ -128,9 +128,9 @@
       "name": "Aakash Gupta",
       "category": "Product Strategy",
       "type": "x_scraper",
-      "username": "aakashg0",
-      "enabled": false,
-      "note": "Disabled - twitterapi.io free credits exhausted (402)"
+      "username": "aakashgupta",
+      "enabled": true,
+      "note": "Handle changed from aakashg0 to aakashgupta. User ID cached."
     },
     {
       "name": "Claire Vo",
@@ -234,8 +234,8 @@
       "category": "AI Architecture",
       "type": "x_scraper",
       "username": "karpathy",
-      "enabled": false,
-      "note": "Disabled - twitterapi.io free credits exhausted (402)"
+      "enabled": true,
+      "note": "User ID cached - 1 API call per run"
     },
     {
       "name": "Andrej Karpathy YouTube",

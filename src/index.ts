@@ -66,21 +66,22 @@ async function main() {
     if (shouldDeliver) {
       console.log('\n📬 Delivering briefing...');
 
-      try {
-        const [notionUrl, gmailMessageId] = await Promise.all([
-          deliverToNotion(briefing, items.length, sourceManager.getSourcesCount()),
-          deliverToGmail(briefing)
-        ]);
+      // Deliver independently — one failure should not block the other
+      const [notionResult, gmailResult] = await Promise.allSettled([
+        deliverToNotion(briefing, items.length, sourceManager.getSourcesCount()),
+        deliverToGmail(briefing)
+      ]);
 
-        console.log('✅ Briefing delivered:');
-        console.log(`   - Notion: ${notionUrl}`);
-        console.log(`   - Gmail: Message ID ${gmailMessageId}`);
-      } catch (deliveryError) {
-        console.error('❌ Delivery failed:', deliveryError instanceof Error ? deliveryError.message : String(deliveryError));
-        console.log('\n📄 Briefing content (for manual delivery):');
-        console.log('---');
-        console.log(briefing);
-        console.log('---');
+      if (notionResult.status === 'fulfilled') {
+        console.log(`✅ Notion: ${notionResult.value}`);
+      } else {
+        console.warn(`⚠️  Notion failed: ${notionResult.reason?.message || notionResult.reason}`);
+      }
+
+      if (gmailResult.status === 'fulfilled') {
+        console.log(`✅ Gmail: Message ID ${gmailResult.value}`);
+      } else {
+        console.warn(`⚠️  Gmail failed: ${gmailResult.reason?.message || gmailResult.reason}`);
       }
     } else {
       console.log('\n⏭️  Skipping delivery (no new items and FORCE_DELIVERY not set)');

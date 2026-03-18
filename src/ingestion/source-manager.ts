@@ -91,10 +91,11 @@ export class SourceManager {
     // Get last processed time for this source
     const lastProcessedTime = this.stateManager.getLastProcessedTime(source.name);
 
-    // Fetch items with retry logic
+    // Twitter: no retries (each retry wastes credits). Others: retry twice.
+    const maxRetries = source.type === 'x_scraper' ? 0 : 2;
     const items = await this.fetchWithRetry(
       () => handler.fetch(source, lastProcessedTime || undefined),
-      2,
+      maxRetries,
       1000
     );
 
@@ -133,7 +134,7 @@ export class SourceManager {
 
         // Don't retry on rate limit (429) — retrying wastes quota
         const errMsg = error instanceof Error ? error.message : String(error);
-        if (errMsg.includes('429') || errMsg.includes('Too Many Requests')) {
+        if (errMsg.includes('429') || errMsg.includes('Too Many Requests') || errMsg.includes('402') || errMsg.includes('Payment Required')) {
           throw error;
         }
 

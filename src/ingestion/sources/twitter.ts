@@ -3,12 +3,16 @@ import { TwitterCache } from './twitter-cache.js';
 
 /**
  * Twitter Handler using twitterapi.io REST API
- * Uses caching to reduce API calls from 2 to 1 per source
+ * Optimized for minimal credit usage:
+ * - Caches user IDs to avoid profile lookups (saves 18 credits/source/run)
+ * - Enforces 6s delay between API calls (QPS limit: 1 req per 5s for free users)
+ * - No retries on failure to avoid wasting credits
  */
 export class TwitterHandler implements SourceHandler {
   private apiKey: string;
   private baseUrl = 'https://api.twitterapi.io';
   private cache: TwitterCache;
+  private lastCallTime = 0;
 
   constructor() {
     const apiKey = process.env.TWITTER_API_IO_KEY;
@@ -19,18 +23,35 @@ export class TwitterHandler implements SourceHandler {
     this.cache = new TwitterCache();
   }
 
+  /**
+   * Enforce QPS limit: wait at least 6 seconds between API calls
+   */
+  private async enforceRateLimit(): Promise<void> {
+    const now = Date.now();
+    const elapsed = now - this.lastCallTime;
+    const minInterval = 6000; // 6 seconds (QPS limit is 1 per 5s, adding buffer)
+
+    if (this.lastCallTime > 0 && elapsed < minInterval) {
+      const waitTime = minInterval - elapsed;
+      console.log(`   ⏳ Rate limit: waiting ${(waitTime / 1000).toFixed(1)}s...`);
+      await new Promise(resolve => setTimeout(resolve, waitTime));
+    }
+    this.lastCallTime = Date.now();
+  }
+
   async fetch(source: SourceConfig, lastProcessedTime?: Date): Promise<SourceItem[]> {
     if (!source.username) {
       throw new Error(`Twitter source "${source.name}" missing username`);
     }
 
     try {
-      // Step 1: Get user ID (check cache first to save API calls)
+      // Step 1: Get user ID (check cache first to save API calls + credits)
       let userId = this.cache.getUserId(source.username);
 
       if (!userId) {
-        // Cache miss - fetch from API
-        console.log(`   📝 Cache miss for @${source.username}, fetching user ID...`);
+        console.log(`   📝 Cache miss for @${source.username}, fetching user ID (one-time cost)...`);
+        await this.enforceRateLimit();
+
         const userInfoResponse = await fetch(
           `${this.baseUrl}/twitter/user/info?userName=${source.username}`,
           {
@@ -46,24 +67,24 @@ export class TwitterHandler implements SourceHandler {
         }
 
         const userInfoData = await userInfoResponse.json();
-        userId = userInfoData.data?.id;
+        userId = userInfoData.data?.id || userInfoData.data?.rest_id || userInfoData.id;
 
         if (!userId) {
+          console.warn(`   Twitter API response for @${source.username}:`, JSON.stringify(userInfoData).substring(0, 300));
           throw new Error(`Could not find user ID for @${source.username}`);
         }
 
-        // Cache the user ID for future runs
+        // Cache permanently — user IDs never change
         this.cache.setUserId(source.username, userId);
-
-        // Add 5-second delay between API calls to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 5000));
       } else {
-        console.log(`   ✓ Using cached user ID for @${source.username}`);
+        console.log(`   ✓ Using cached user ID for @${source.username} (0 credits)`);
       }
 
-      // Step 2: Fetch user timeline using userId
+      // Step 2: Fetch user timeline
+      await this.enforceRateLimit();
+
       const timelineResponse = await fetch(
-        `${this.baseUrl}/twitter/user/tweet_timeline?userId=${userId}&includeReplies=false`,
+        `${this.baseUrl}/twitter/user/last_tweets?userId=${userId}`,
         {
           headers: {
             'X-API-Key': this.apiKey,
@@ -82,21 +103,18 @@ export class TwitterHandler implements SourceHandler {
       const cutoffTime = lastProcessedTime || new Date(Date.now() - 24 * 60 * 60 * 1000);
 
       for (const tweet of tweets) {
-        // Parse tweet timestamp (twitterapi.io uses 'created_at' field)
         const createdAt = tweet.created_at || tweet.createdAt;
         if (!createdAt) continue;
 
         const publishedAt = new Date(createdAt);
 
-        // Filter by last processed time
         if (publishedAt <= cutoffTime) {
           continue;
         }
 
-        // Get tweet text
         const tweetText = tweet.text || tweet.full_text || '';
 
-        // Skip retweets and replies to maintain high signal-to-noise ratio
+        // Skip retweets and replies
         if (tweetText.startsWith('RT @') || tweetText.startsWith('@')) {
           continue;
         }
@@ -112,7 +130,7 @@ export class TwitterHandler implements SourceHandler {
           id: String(tweetId),
           title: `Tweet by @${source.username}`,
           content: this.cleanTweetText(tweetText),
-          url: `https://twitter.com/${source.username}/status/${tweetId}`,
+          url: `https://x.com/${source.username}/status/${tweetId}`,
           publishedAt,
           category: source.category,
           sourceName: source.name
@@ -127,9 +145,7 @@ export class TwitterHandler implements SourceHandler {
 
   private cleanTweetText(text: string): string {
     return text
-      // Remove short URLs (they're usually included separately)
       .replace(/https?:\/\/t\.co\/\w+/g, '')
-      // Clean up excessive whitespace
       .replace(/\s+/g, ' ')
       .trim();
   }
