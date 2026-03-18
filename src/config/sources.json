@@ -113,8 +113,8 @@
       "category": "Product Strategy",
       "type": "x_scraper",
       "username": "shreyas",
-      "enabled": true,
-      "note": "Using twitterapi.io with user ID caching (reduces API calls by 50%)"
+      "enabled": false,
+      "note": "Disabled - twitterapi.io free credits exhausted (402)"
     },
     {
       "name": "Elena Verna",
@@ -129,8 +129,8 @@
       "category": "Product Strategy",
       "type": "x_scraper",
       "username": "aakashg0",
-      "enabled": true,
-      "note": "Twitter takes complement blog content - different signal"
+      "enabled": false,
+      "note": "Disabled - twitterapi.io free credits exhausted (402)"
     },
     {
       "name": "Claire Vo",
@@ -234,8 +234,8 @@
       "category": "AI Architecture",
       "type": "x_scraper",
       "username": "karpathy",
-      "enabled": true,
-      "note": "Using twitterapi.io with user ID caching (reduces API calls by 50%)"
+      "enabled": false,
+      "note": "Disabled - twitterapi.io free credits exhausted (402)"
     },
     {
       "name": "Andrej Karpathy YouTube",
