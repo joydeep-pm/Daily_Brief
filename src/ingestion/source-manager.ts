@@ -53,6 +53,21 @@ export class SourceManager {
         }
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
+
+        // If Twitter API fails, try Nitter RSS fallback
+        if (source.type === 'x_scraper' && source.username) {
+          try {
+            console.log(`   ↻ ${source.name}: Twitter API failed, trying Nitter fallback...`);
+            const nitterHandler = this.handlers.get('nitter')!;
+            const items = await nitterHandler.fetch(source);
+            allItems.push(...items);
+            console.log(`   ✓ ${source.name} (via Nitter): ${items.length} new items`);
+            continue;
+          } catch {
+            // Nitter also failed, report original error
+          }
+        }
+
         errors.push({
           sourceName: source.name,
           sourceType: source.type,
@@ -115,6 +130,12 @@ export class SourceManager {
         return await fn();
       } catch (error) {
         lastError = error;
+
+        // Don't retry on rate limit (429) — retrying wastes quota
+        const errMsg = error instanceof Error ? error.message : String(error);
+        if (errMsg.includes('429') || errMsg.includes('Too Many Requests')) {
+          throw error;
+        }
 
         // Don't retry on last attempt
         if (attempt < maxRetries) {

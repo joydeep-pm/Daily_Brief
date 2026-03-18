@@ -8,16 +8,16 @@ import { SourceHandler, SourceConfig, SourceItem } from '../types.js';
 export class NitterHandler implements SourceHandler {
   private parser: Parser;
   private nitterInstances = [
+    'xcancel.com',
     'nitter.poast.org',
-    'nitter.privacydev.net',
-    'nitter.1d4.us'
+    'nitter.privacydev.net'
   ];
 
   constructor() {
     this.parser = new Parser({
       timeout: 10000,
       headers: {
-        'User-Agent': 'Daily-Brief-Aggregator/1.0'
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
       }
     });
   }
