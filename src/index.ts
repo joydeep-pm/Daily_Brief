@@ -6,6 +6,7 @@ import { AnthropicProvider } from './synthesis/providers/anthropic.js';
 import { OpenAIProvider } from './synthesis/providers/openai.js';
 import { NotionDelivery } from './delivery/notion.js';
 import { GmailDelivery } from './delivery/gmail.js';
+import { ObsidianDelivery } from './delivery/obsidian.js';
 
 // Load environment variables
 dotenv.config();
@@ -66,10 +67,11 @@ async function main() {
     if (shouldDeliver) {
       console.log('\n📬 Delivering briefing...');
 
-      // Deliver independently — one failure should not block the other
-      const [notionResult, gmailResult] = await Promise.allSettled([
+      // Deliver independently — one failure should not block the others
+      const [notionResult, gmailResult, obsidianResult] = await Promise.allSettled([
         deliverToNotion(briefing, items.length, sourceManager.getSourcesCount()),
-        deliverToGmail(briefing)
+        deliverToGmail(briefing),
+        deliverToObsidian(briefing)
       ]);
 
       if (notionResult.status === 'fulfilled') {
@@ -82,6 +84,12 @@ async function main() {
         console.log(`✅ Gmail: Message ID ${gmailResult.value}`);
       } else {
         console.warn(`⚠️  Gmail failed: ${gmailResult.reason?.message || gmailResult.reason}`);
+      }
+
+      if (obsidianResult.status === 'fulfilled') {
+        console.log(`✅ Obsidian: ${obsidianResult.value}`);
+      } else {
+        console.warn(`⚠️  Obsidian failed: ${obsidianResult.reason?.message || obsidianResult.reason}`);
       }
     } else {
       console.log('\n⏭️  Skipping delivery (no new items and FORCE_DELIVERY not set)');
@@ -138,6 +146,21 @@ async function deliverToGmail(briefing: string): Promise<string> {
     return messageId;
   } catch (error) {
     throw new Error(`Gmail delivery failed: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
+async function deliverToObsidian(briefing: string): Promise<string> {
+  if (!process.env.OBSIDIAN_VAULT_PATH) {
+    console.warn('   ⏭️  Obsidian vault path not configured, skipping');
+    return 'skipped';
+  }
+
+  try {
+    const obsidian = new ObsidianDelivery();
+    const result = await obsidian.deliver(briefing);
+    return result;
+  } catch (error) {
+    throw new Error(`Obsidian delivery failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
