@@ -23,8 +23,10 @@ export class NotionDelivery {
       // Convert markdown to Notion blocks
       const blocks = this.markdownToNotionBlocks(briefing);
 
-      // Create page in database with only required Name property
-      // Additional properties (Date, Source Count, Item Count) can be added manually in Notion if needed
+      // Notion API limits to 100 blocks per request — send first batch with page creation, append the rest
+      const firstBatch = blocks.slice(0, 100);
+      const remaining = blocks.slice(100);
+
       const response = await this.client.pages.create({
         parent: {
           database_id: this.databaseId
@@ -40,11 +42,20 @@ export class NotionDelivery {
             ]
           }
         },
-        children: blocks
+        children: firstBatch
       });
 
-      // Return URL - construct it from the page ID since url property may not exist
+      // Append remaining blocks in batches of 100
       const pageId = 'id' in response ? response.id : '';
+      for (let i = 0; i < remaining.length; i += 100) {
+        const batch = remaining.slice(i, i + 100);
+        await this.client.blocks.children.append({
+          block_id: pageId,
+          children: batch,
+        });
+      }
+
+      // Return URL
       return `https://www.notion.so/${pageId.replace(/-/g, '')}`;
     } catch (error) {
       throw new Error(`Failed to deliver to Notion: ${error instanceof Error ? error.message : String(error)}`);
