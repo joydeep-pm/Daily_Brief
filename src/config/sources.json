@@ -165,6 +165,14 @@
       "note": "Switched from RSS (blocked) to Gmail extraction"
     },
     {
+      "name": "The Code",
+      "category": "AI Architecture",
+      "type": "gmail_extraction",
+      "query": "from:thecode@mail.joinsuperhuman.ai",
+      "enabled": true,
+      "note": "Tech/AI newsletter via Superhuman"
+    },
+    {
       "name": "Simon Willison's Weblog",
       "category": "AI Architecture",
       "type": "rss",
@@ -322,6 +330,30 @@
       "url": "https://lexfridman.com/feed/podcast/",
       "enabled": true,
       "note": "Long-form conversations about AI, science, and technology"
+    },
+    {
+      "name": "No Priors Podcast",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://feeds.megaphone.fm/nopriors",
+      "enabled": true,
+      "note": "Sarah Guo & Elad Gil on AI, technology, and startups"
+    },
+    {
+      "name": "The AI Daily Brief",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://anchor.fm/s/f7cac464/podcast/rss",
+      "enabled": true,
+      "note": "Nathaniel Whittemore - daily AI news and analysis"
+    },
+    {
+      "name": "Latent Space Podcast",
+      "category": "AI Architecture",
+      "type": "rss",
+      "url": "https://rss.flightcast.com/vgnxzgiwwzwke85ym53fjnzu.xml",
+      "enabled": true,
+      "note": "The AI Engineer Podcast - complements Latent Space blog feed"
     },
     {
       "name": "Lex Fridman YouTube",

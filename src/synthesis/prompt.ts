@@ -74,27 +74,36 @@ export function buildContentPrompt(items: SourceItem[]): string {
     byCategory.set(item.category, existing);
   }
 
-  // Smart sampling: if too many items, prioritize recent and diverse sources
+  // Smart sampling: ensure diversity by limiting items per source
   const MAX_ITEMS = 100; // Limit total items to prevent token overflow
+  const MAX_ITEMS_PER_SOURCE = 5; // Prevent any single source from dominating
   let sampledItems: SourceItem[] = [];
 
-  if (items.length > MAX_ITEMS) {
-    // Sort by published date (most recent first)
-    const sortedItems = [...items].sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
+  // Sort by published date (most recent first)
+  const sortedItems = [...items].sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
 
-    // Take top items ensuring diversity across sources
-    const seenSources = new Set<string>();
-    for (const item of sortedItems) {
-      if (sampledItems.length >= MAX_ITEMS) break;
+  // Group by source and apply per-source limits
+  const itemsBySource = new Map<string, SourceItem[]>();
+  for (const item of sortedItems) {
+    const sourceItems = itemsBySource.get(item.sourceName) || [];
 
-      // Prefer items from sources we haven't seen yet
-      if (!seenSources.has(item.sourceName) || sampledItems.length < MAX_ITEMS / 2) {
-        sampledItems.push(item);
-        seenSources.add(item.sourceName);
-      }
+    // Only add if we haven't hit the per-source limit
+    if (sourceItems.length < MAX_ITEMS_PER_SOURCE) {
+      sourceItems.push(item);
+      itemsBySource.set(item.sourceName, sourceItems);
     }
-  } else {
-    sampledItems = items;
+  }
+
+  // Flatten back to array (still sorted by recency within each source)
+  for (const sourceItems of itemsBySource.values()) {
+    sampledItems.push(...sourceItems);
+  }
+
+  // If still too many items, take the most recent ones
+  if (sampledItems.length > MAX_ITEMS) {
+    sampledItems = sampledItems
+      .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
+      .slice(0, MAX_ITEMS);
   }
 
   let prompt = `---\n## CONTENT FROM LAST 24 HOURS:\n\n`;
