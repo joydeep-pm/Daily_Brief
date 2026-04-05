@@ -436,6 +436,150 @@
       "username": "KentBeck",
       "enabled": false,
       "note": "Disabled - use for Twitter hot takes if rate limits allow"
+    },
+    {
+      "name": "jumperz",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "jumperz",
+      "enabled": false,
+      "note": "Visual takes on trending innovations"
+    },
+    {
+      "name": "hooeem",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "hooeem",
+      "enabled": false,
+      "note": "Comprehensive guides & courses"
+    },
+    {
+      "name": "Greg Isenberg",
+      "category": "Product Strategy",
+      "type": "x_scraper",
+      "username": "gregisenberg",
+      "enabled": true,
+      "note": "AI entrepreneurship and podcasts"
+    },
+    {
+      "name": "Eng Khairallah",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "eng_khairallah1",
+      "enabled": true,
+      "note": "Claude & agent tutorials"
+    },
+    {
+      "name": "kloss",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "kloss",
+      "enabled": false,
+      "note": "Unhinged takes & AI prompts"
+    },
+    {
+      "name": "0xSero",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "0xSero",
+      "enabled": true,
+      "note": "Local AI & open source"
+    },
+    {
+      "name": "Ryan Carson",
+      "category": "Product Strategy",
+      "type": "x_scraper",
+      "username": "ryancarson",
+      "enabled": false,
+      "note": "Unique workflows & systems"
+    },
+    {
+      "name": "John Carmack",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "ID_AA_Carmack",
+      "enabled": true,
+      "note": "Deep research & AGI"
+    },
+    {
+      "name": "DeRonin",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "DeRonin_",
+      "enabled": false,
+      "note": "Onboarding tutorials & guides"
+    },
+    {
+      "name": "k1rallik",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "k1rallik",
+      "enabled": false,
+      "note": "Unique takes & deep dive articles"
+    },
+    {
+      "name": "EXM7777",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "EXM7777",
+      "enabled": false,
+      "note": "Perspective on all things AI"
+    },
+    {
+      "name": "jordymaui",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "jordymaui",
+      "enabled": false,
+      "note": "OpenClaw tutorials & guides"
+    },
+    {
+      "name": "birdabo",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "birdabo",
+      "enabled": false,
+      "note": "AI memes, news, and stories"
+    },
+    {
+      "name": "om_patel5",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "om_patel5",
+      "enabled": true,
+      "note": "Open source AI tools"
+    },
+    {
+      "name": "RoundtableSpace",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "RoundtableSpace",
+      "enabled": false,
+      "note": "Hourly curated content"
+    },
+    {
+      "name": "0x_kaize",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "0x_kaize",
+      "enabled": false,
+      "note": "Articles and educational curation"
+    },
+    {
+      "name": "sharbel",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "sharbel",
+      "enabled": false,
+      "note": "Video tutorials, tools, and privacy articles"
+    },
+    {
+      "name": "Riley Brown",
+      "category": "AI Architecture",
+      "type": "x_scraper",
+      "username": "rileybrown",
+      "enabled": false,
+      "note": "Mobile vibe coding & video content"
     }
   ]
 }
