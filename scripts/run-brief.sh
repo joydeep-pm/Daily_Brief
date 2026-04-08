@@ -1,6 +1,6 @@
 #!/bin/bash
 # Daily Brief - local cron runner
-# Runs at 10 AM IST (4:30 AM UTC) daily
+# Runs at 10 AM IST daily
 
 export PATH="/Users/joy/.nvm/versions/node/v22.22.0/bin:$PATH"
 
@@ -10,6 +10,9 @@ cd "/Users/joy/Daily Brief"
 set -a
 source .env
 set +a
+
+# Always deliver (even if no new items — LLM still synthesizes from recent state)
+export FORCE_DELIVERY=true
 
 # Create logs directory if needed
 mkdir -p logs

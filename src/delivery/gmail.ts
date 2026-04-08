@@ -79,55 +79,77 @@ export class GmailDelivery {
       .replace(/=+$/, '');
   }
 
-  private createBeautifulEmail(briefing: string, formattedDate: string): string {
+  private createBeautifulEmail(briefing: string, _formattedDate: string): string {
     // Remove the first heading if it's just the date (redundant with subject)
     const cleanBriefing = briefing.replace(/^#\s+Daily Brief - \d{4}-\d{2}-\d{2}\s*\n/, '');
 
     const content = this.markdownToHtml(cleanBriefing);
 
+    const dayOfWeek = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+    const shortDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
     return `
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daily Brief</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f9f9f9; font-family: Georgia, 'Times New Roman', Times, serif;">
+<body style="margin: 0; padding: 0; background-color: #f4f4f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
 
-  <!-- Email Container -->
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9f9f9; padding: 40px 20px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f0; padding: 32px 16px;">
     <tr>
       <td align="center">
-        <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 640px; background-color: #ffffff; border-radius: 2px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 620px;">
 
-          <!-- Header -->
+          <!-- Top label -->
           <tr>
-            <td style="background-color: #1a1a2e; padding: 40px 48px; text-align: center;">
-              <h1 style="margin: 0; color: #ffffff; font-size: 26px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+            <td style="padding: 0 0 12px 0; text-align: center;">
+              <span style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888;">
+                ${dayOfWeek} &bull; ${shortDate}
+              </span>
+            </td>
+          </tr>
+
+          <!-- Header card -->
+          <tr>
+            <td style="background-color: #0f172a; border-radius: 12px 12px 0 0; padding: 36px 48px 32px 48px; text-align: center;">
+              <div style="display: inline-block; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); border-radius: 20px; padding: 4px 14px; margin-bottom: 16px;">
+                <span style="font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #818cf8;">AI &middot; PM &middot; Leadership</span>
+              </div>
+              <h1 style="margin: 0; color: #f8fafc; font-size: 30px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1;">
                 Daily Brief
               </h1>
-              <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.6); font-size: 15px; font-family: Georgia, 'Times New Roman', Times, serif; font-style: italic;">
-                ${formattedDate}
+              <p style="margin: 10px 0 0 0; color: #94a3b8; font-size: 14px; font-weight: 400;">
+                Your signal in the noise
               </p>
             </td>
           </tr>
 
+          <!-- Accent bar -->
+          <tr>
+            <td style="background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%); height: 3px; font-size: 0; line-height: 0;">&nbsp;</td>
+          </tr>
+
           <!-- Content -->
           <tr>
-            <td style="padding: 44px 48px;">
+            <td style="background-color: #ffffff; padding: 40px 48px; border-radius: 0;">
               ${content}
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="padding: 24px 48px; border-top: 1px solid #e0e0e0; text-align: center;">
-              <p style="margin: 0; color: #9ca3af; font-size: 12px; line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
-                Compiled by AI &middot; ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+            <td style="background-color: #0f172a; border-radius: 0 0 12px 12px; padding: 20px 48px; text-align: center;">
+              <p style="margin: 0; color: #475569; font-size: 12px; line-height: 1.6;">
+                Compiled by AI &middot; ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })} IST
               </p>
             </td>
           </tr>
+
+          <!-- Bottom spacing -->
+          <tr><td style="height: 32px;"></td></tr>
 
         </table>
       </td>
@@ -141,63 +163,73 @@ export class GmailDelivery {
   private markdownToHtml(markdown: string): string {
     let html = '';
     const lines = markdown.split('\n');
-    let inSection = false;
+    let inList = false;
+    let isFirst = true;
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       if (!line.trim()) {
+        if (inList) {
+          html += '</ul>';
+          inList = false;
+        }
         continue;
       }
 
-      // Heading 2 (Main Sections) - clean bottom border
-      if (line.startsWith('## ')) {
-        if (inSection) html += '</div>'; // Close previous section
-
+      // Heading 1
+      if (line.startsWith('# ')) {
+        if (inList) { html += '</ul>'; inList = false; }
+        const title = this.escapeHtml(line.substring(2));
+        html += `<h1 style="margin: 0 0 24px 0; color: #0f172a; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;">${title}</h1>`;
+      }
+      // Heading 2 — section header with left accent bar
+      else if (line.startsWith('## ')) {
+        if (inList) { html += '</ul>'; inList = false; }
         const title = this.escapeHtml(line.substring(3));
+        const topMargin = isFirst ? '0' : '44px';
         html += `
-          <h2 style="margin: 40px 0 20px 0; padding-bottom: 12px; border-bottom: 2px solid #e0e0e0; color: #1a1a1a; font-size: 22px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">${title}</h2>
-        `;
-        inSection = true;
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin: ${topMargin} 0 20px 0;">
+            <tr>
+              <td style="width: 4px; background: linear-gradient(180deg, #6366f1, #8b5cf6); border-radius: 2px;">&nbsp;</td>
+              <td style="padding-left: 14px;">
+                <h2 style="margin: 0; color: #0f172a; font-size: 20px; font-weight: 700; letter-spacing: -0.3px;">${title}</h2>
+              </td>
+            </tr>
+          </table>`;
+        isFirst = false;
       }
-      // Heading 3 (Subsections)
+      // Heading 3
       else if (line.startsWith('### ')) {
-        html += `<h3 style="margin: 28px 0 12px 0; color: #1a1a1a; font-size: 17px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">${this.escapeHtml(line.substring(4))}</h3>`;
+        if (inList) { html += '</ul>'; inList = false; }
+        const title = this.escapeHtml(line.substring(4));
+        html += `<h3 style="margin: 28px 0 10px 0; color: #1e293b; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">${title}</h3>`;
       }
-      // Bullet list - enhanced styling
+      // Bullet list
       else if (line.startsWith('- ') || line.startsWith('* ')) {
-        const prevLine = i > 0 ? lines[i - 1] : '';
-        if (!prevLine.startsWith('- ') && !prevLine.startsWith('* ')) {
-          html += '<ul style="margin: 16px 0; padding-left: 28px; list-style-type: none;">';
+        if (!inList) {
+          html += '<ul style="margin: 14px 0; padding: 0; list-style: none;">';
+          inList = true;
         }
-
         html += `
-          <li style="margin-bottom: 14px; padding-left: 8px; position: relative; color: #3d3d3d; font-size: 17px; line-height: 1.78;">
-            <span style="position: absolute; left: -16px; color: #9ca3af;">•</span>
-            ${this.parseInlineMarkdown(line.substring(2))}
-          </li>
-        `;
-
-        const nextLine = i < lines.length - 1 ? lines[i + 1] : '';
-        if (!nextLine.startsWith('- ') && !nextLine.startsWith('* ')) {
-          html += '</ul>';
-        }
+          <li style="display: flex; align-items: flex-start; margin-bottom: 12px; padding: 14px 16px; background: #f8fafc; border-radius: 8px; border-left: 3px solid #e2e8f0;">
+            <span style="color: #6366f1; font-weight: 700; font-size: 16px; margin-right: 10px; margin-top: 1px; flex-shrink: 0;">›</span>
+            <span style="color: #334155; font-size: 15px; line-height: 1.7;">${this.parseInlineMarkdown(line.substring(2))}</span>
+          </li>`;
       }
       // Divider
       else if (line.trim() === '---') {
-        if (inSection) {
-          html += '</div>';
-          inSection = false;
-        }
-        html += '<hr style="border: none; border-top: 1px solid #e0e0e0; margin: 40px 0;">';
+        if (inList) { html += '</ul>'; inList = false; }
+        html += '<div style="border-top: 1px solid #e2e8f0; margin: 36px 0;"></div>';
       }
       // Regular paragraph
       else {
-        html += `<p style="margin: 16px 0; color: #3d3d3d; line-height: 1.78; font-size: 17px;">${this.parseInlineMarkdown(line)}</p>`;
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<p style="margin: 14px 0; color: #475569; line-height: 1.75; font-size: 15px;">${this.parseInlineMarkdown(line)}</p>`;
       }
     }
 
-    if (inSection) html += '</div>';
+    if (inList) html += '</ul>';
     return html;
   }
 
@@ -206,16 +238,16 @@ export class GmailDelivery {
     text = this.escapeHtmlBasic(text);
 
     // Bold (**text**)
-    text = text.replace(/\*\*(.+?)\*\*/g, '<strong style="color: #1a1a1a; font-weight: 600;">$1</strong>');
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong style="color: #0f172a; font-weight: 700;">$1</strong>');
 
     // Italic (*text*)
-    text = text.replace(/\*(.+?)\*/g, '<em style="color: #3d3d3d;">$1</em>');
+    text = text.replace(/\*(.+?)\*/g, '<em style="color: #475569;">$1</em>');
 
     // Code (`text`)
-    text = text.replace(/`(.+?)`/g, '<code style="background: #f5f5f5; color: #b91c1c; padding: 3px 6px; border-radius: 4px; font-family: \'SFMono-Regular\', \'Consolas\', \'Liberation Mono\', \'Menlo\', monospace; font-size: 14px;">$1</code>');
+    text = text.replace(/`(.+?)`/g, '<code style="background: #f1f5f9; color: #7c3aed; padding: 2px 6px; border-radius: 4px; font-family: \'SFMono-Regular\', \'Consolas\', monospace; font-size: 13px;">$1</code>');
 
     // Links ([text](url))
-    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color: #8b5cf6; text-decoration: none; border-bottom: 1px solid rgba(139, 92, 246, 0.25);">$1</a>');
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color: #6366f1; text-decoration: none; font-weight: 500; border-bottom: 1px solid rgba(99,102,241,0.3);">$1</a>');
 
     return text;
   }

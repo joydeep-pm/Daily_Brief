@@ -56,7 +56,7 @@ async function getNotionDates(): Promise<string[]> {
     for (const page of res.results as any[]) {
       const title = page.properties?.Name?.title?.[0]?.plain_text || '';
       const created = page.created_time?.slice(0, 16).replace('T', ' ') || '';
-      dates.push(`${title} (${created})`);
+      dates.push(title);
     }
 
     cursor = res.has_more ? res.next_cursor ?? undefined : undefined;
